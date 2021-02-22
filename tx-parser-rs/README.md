@@ -1,0 +1,1 @@
+This folder contains a sample Rust project that demonstrates the power of WebAssembly.
