@@ -1,7 +1,9 @@
 # Rust WASM Experiments
 This repository contains a simple real-life example of how Rust and WebAssembly can be used to speed up an application.
 
-# Project structure
-- demo: Main NodeJS project that glues everything together.
-- tx-parser-rs: Rust crate that can be compiled into WebAssembly.
-- tx-parser-js: JavaScript implementation of the Rust crate so we can compare performance differences.
+# Projects in this repository
+| Project               | Description                                                   |
+|-----------------------|---------------------------------------------------------------|
+| `demo`                | Main project.                                                 |
+| `data-generator-cli`  | Command-line utility that generates sample data.              |
+| `tx-parser-rs`        | Data parser written in Rust and compiled into WebAssembly.    |
