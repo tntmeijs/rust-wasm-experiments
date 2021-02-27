@@ -1,8 +1,18 @@
 use rand::{thread_rng, Rng};
+use std::fs::File;
+use std::io::{BufWriter, Write};
 
+const OUTPUT_FILE: &str = "./tx_data.csv";
+
+/// Application entry point
 fn main() -> std::io::Result<()> {
     let line_count = get_line_count_from_cmdline_args();
-    let lines = generate_lines(line_count);
+    let file = File::create(OUTPUT_FILE)?;
+    let mut file_writer = BufWriter::new(file);
+
+    for line in &generate_lines(line_count) {
+        writeln!(file_writer, "{}", line)?;
+    }
 
     Ok(())
 }
@@ -51,8 +61,8 @@ fn generate_lines(count: u32) -> Vec<String> {
 
         let index = i.to_string();
         let name = item_names[rng.gen_range(0..item_names.len())].to_owned();
-        let min_price = format!("{:.1}", base_price);
-        let max_price = format!("{:.1}", ((rng.gen::<f64>() * (base_price * 0.5f64)) + base_price));
+        let min_price = format!("{:.2}", base_price);
+        let max_price = format!("{:.2}", ((rng.gen::<f64>() * (base_price * 0.5f64)) + base_price));
 
         lines.push(vec!(index, name, min_price, max_price).join(", "));
     }
