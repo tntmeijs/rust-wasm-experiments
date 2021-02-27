@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io::{BufWriter, Write};
 
 const OUTPUT_FILE: &str = "./tx_data.csv";
+const LOTS_OF_LINES_WARNING: u32 = 250_000;
 
 /// Application entry point
 fn main() -> std::io::Result<()> {
@@ -10,10 +11,19 @@ fn main() -> std::io::Result<()> {
     let file = File::create(OUTPUT_FILE)?;
     let mut file_writer = BufWriter::new(file);
 
-    for line in &generate_lines(line_count) {
+    if line_count > LOTS_OF_LINES_WARNING {
+        println!("You are trying to generate a lot of transactions, this could take a VERY long time");
+    }
+
+    println!("Starting transaction generation...");
+    let lines = generate_lines(line_count);
+
+    println!("Writing to disk, this should not take long...");
+    for line in &lines {
         writeln!(file_writer, "{}", line)?;
     }
 
+    println!("Done!");
     Ok(())
 }
 
@@ -56,6 +66,7 @@ fn generate_lines(count: u32) -> Vec<String> {
         "toy"
     );
 
+    let mut previous_percentage = 0;
     for i in 0..count {
         let base_price = rng.gen::<f32>() * 1000.0f32;
 
@@ -65,6 +76,12 @@ fn generate_lines(count: u32) -> Vec<String> {
         let max_price = format!("{:.2}", ((rng.gen::<f32>() * (base_price * 0.5f32)) + base_price));
 
         lines.push(vec!(index, name, min_price, max_price).join(", "));
+
+        let percentage = (i as f32 / count as f32 * 100.0f32).round() as u32;
+        if percentage > previous_percentage {
+            println!("Generating transactions...\t\t{}%", percentage);
+            previous_percentage = percentage;
+        }
     }
 
     lines
