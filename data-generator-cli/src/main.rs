@@ -1,12 +1,10 @@
 use rand::{thread_rng, Rng};
 
-fn main() {
+fn main() -> std::io::Result<()> {
     let line_count = get_line_count_from_cmdline_args();
     let lines = generate_lines(line_count);
 
-    for line in &lines {
-        println!("{}", line);
-    }
+    Ok(())
 }
 
 /// Determine the number of lines to generate based on the "--size=<value>" command-line argument
