@@ -4,6 +4,7 @@
   "description": "Simple website to demonstrate the advantages of WebAssembly",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
     "serve": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
