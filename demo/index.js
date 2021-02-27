@@ -1,6 +1,31 @@
 const onUploadFile = event => {
-    const files = event.target.files;
+    processFiles(event.target.files);
+};
 
+const onDropFile = event => {
+    event.preventDefault();
+    let files = [];
+
+    if (event.dataTransfer.items) {
+        // Use the DataTransferItemList interface to access files
+        Array.from(event.dataTransfer.items).forEach(item => {
+            if (item.kind === "file") {
+                files.push(item.getAsFile());
+            }
+        });
+    } else {
+        // Fallback by using the DataTransfer interface to access files
+        files = event.dataTransfer.files;
+    }
+
+    processFiles(files);
+};
+
+const onDragOver = event => {
+    event.preventDefault();
+};
+
+const processFiles = files => {
     for (let i = 0; i < files.length; ++i) {
         parseFileWasm(files[i]);
     }
@@ -28,4 +53,9 @@ const parseFileWasm = blob => {
     });
 }
 
-document.getElementById("file-upload").addEventListener("change", onUploadFile);
+const fileUploadInput = document.getElementById("file-upload");
+const dropArea = document.getElementById("file-drop-area");
+
+fileUploadInput.addEventListener("change", onUploadFile);
+dropArea.addEventListener("drop", onDropFile);
+dropArea.addEventListener("dragover", onDragOver);
