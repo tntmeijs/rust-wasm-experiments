@@ -12,7 +12,7 @@ const parseFileWasm = blob => {
         reader.readAsArrayBuffer(blob);
         reader.onload = () => {
             const bytes = new Uint8Array(reader.result);
-            console.info(`Rust WASM result: ${txParser.process(bytes)}`);
+            console.info(`${txParser.process(bytes)}`);
         };
     });
 }
