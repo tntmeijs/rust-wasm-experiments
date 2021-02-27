@@ -2,11 +2,21 @@
 <html lang="en">
     <head>
         <meta charset="utf-8"/>
+        <link href="style.css" rel="stylesheet"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
         <title>Rust WASM Experiments</title>
     </head>
     <body>
-        <input id="file-upload" type="file"/>
+        <div class="container">
+            <div id="file-upload-container" hidden>
+                <label for="file-upload" id="file-drop-area">
+                    <h1>Click to browse, or drop files here</h1>
+                </label>
+            </div>
+        </div>
 
+        <input id="file-upload" files multiple hidden type="file" accept=".csv"/>
         <script src="./index.js"></script>
     </body>
 </html>
