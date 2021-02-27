@@ -6,11 +6,14 @@ const onUploadFile = event => {
     }
 };
 
-const parseFileWasm = file => {
+const parseFileWasm = blob => {
     import("tx-parser-rs").then(txParser => {
-        console.log(`result: ${txParser.process([])}`);
-
-        txParser.greet(file.name)
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(blob);
+        reader.onload = () => {
+            const bytes = new Uint8Array(reader.result);
+            console.info(`Rust WASM result: ${txParser.process(bytes)}`);
+        };
     });
 }
 
