@@ -8,6 +8,8 @@ const onUploadFile = event => {
 
 const parseFileWasm = file => {
     import("tx-parser-rs").then(txParser => {
+        console.log(`result: ${txParser.process([])}`);
+
         txParser.greet(file.name)
     });
 }
