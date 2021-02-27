@@ -57,7 +57,7 @@ pub fn process(data: &[u8]) -> String {
         line_index += 1;
     }
 
-    // Trans how often items occur in the data set
+    // Tracks how often items occur in the data set
     let mut name_occurance_map = HashMap::new();
 
     // Tracks the cheapest object
