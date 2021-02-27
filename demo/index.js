@@ -65,7 +65,6 @@ const parseFileWasm = file => {
         start = performance.now();
 
         const reader = new FileReader();
-        reader.readAsArrayBuffer(file);
         reader.onload = () => {
             const bytes = new Uint8Array(reader.result);
 
@@ -76,6 +75,8 @@ const parseFileWasm = file => {
             const result = txParser.process(bytes);
             console.info(`Finished parsing binary blob (${performance.now() - start}ms)`);
         };
+
+        reader.readAsArrayBuffer(file);
     });
 }
 
