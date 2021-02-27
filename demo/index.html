@@ -9,14 +9,14 @@
     </head>
     <body>
         <div class="container">
-            <div class="file-upload-container">
+            <div id="file-upload-container" hidden>
                 <label for="file-upload" id="file-drop-area">
                     <h1>Click to browse, or drop files here</h1>
                 </label>
             </div>
         </div>
 
-        <input id="file-upload" hidden type="file"/>
+        <input id="file-upload" files multiple hidden type="file" accept=".csv"/>
         <script src="./index.js"></script>
     </body>
 </html>

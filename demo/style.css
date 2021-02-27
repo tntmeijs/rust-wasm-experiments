@@ -19,7 +19,7 @@ h1 {
     justify-content: center;
 }
 
-.file-upload-container {
+#file-upload-container {
     width: 50%;
     height: 50%;
     user-select: none;
