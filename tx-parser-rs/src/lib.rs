@@ -22,7 +22,11 @@ pub fn process(data: &[u8]) -> String {
         if line_index > 0 {
             // Parse the line into usable data
             let line = buffer.into_iter().collect::<String>();
-            data_for_js.push(parse_line(&line).expect("Unable to parse line"));
+            let result = parse_line(&line);
+
+            if result.is_ok() {
+                data_for_js.push(result.unwrap());
+            }
         }
 
         // Move on to the next byte
@@ -33,13 +37,13 @@ pub fn process(data: &[u8]) -> String {
     return data_for_js.join("\n");
 }
 
-pub fn parse_line(line: &str) -> Option<String> {
+pub fn parse_line(line: &str) -> Result<String, &str> {
     // A line is formatted like so: <index>, <name>, <min_price>, <max_price>
     let parts = line.split(", ").collect::<Vec<&str>>();
     
     if parts.len() != 4 {
-        return None;
+        return Err("Row does not contain the expected number of entries");
     }
 
-    Some(line.to_owned())
+    Ok(line.to_owned())
 }
