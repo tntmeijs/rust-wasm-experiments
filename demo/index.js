@@ -6,19 +6,24 @@ const onUploadFile = event => {
     }
 };
 
-const parseFileWasm = blob => {
-    console.info("Starting processing now...");
-    const t0 = performance.now();
-    
+const parseFileWasm = blob => {    
+    let start = performance.now();
+
     import("tx-parser-rs").then(txParser => {
+        console.info(`WebAssembly module loaded in (${performance.now() - start}ms)`)
+        start = performance.now();
+
         const reader = new FileReader();
         reader.readAsArrayBuffer(blob);
         reader.onload = () => {
             const bytes = new Uint8Array(reader.result);
-            console.info(txParser.process(bytes));
-    
-            const t1 = performance.now();
-            console.info(`WebAssembly (Rust) processing time: ${t1 - t0} milliseconds`);
+
+            console.info(`JavaScript loaded the file into a byte array in (${performance.now() - start}ms)`)
+            start = performance.now();
+
+            console.info("Starting to parse binary blob now");
+            const result = txParser.process(bytes);
+            console.info(`Finished parsing binary blob (${performance.now() - start}ms)`);
         };
     });
 }
