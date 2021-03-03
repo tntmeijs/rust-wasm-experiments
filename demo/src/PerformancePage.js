@@ -42,6 +42,8 @@ export default function PerformancePage() {
         setTxFiles([]);
     };
 
+    const onRunBenchmark = () => {};
+
     return (
         <>
             <Typography variant="h2">Performance Test</Typography>
@@ -59,6 +61,11 @@ export default function PerformancePage() {
             </RenderIf>
 
             <RenderIf value={txFiles.length > 0}>
+                <Button variant="contained" color="primary" onClick={onRunBenchmark}>
+                    run benchmark
+                </Button>
+                <br />
+                <br />
                 <Button variant="contained" color="secondary" onClick={onClearFiles}>
                     clear file(s)
                 </Button>
