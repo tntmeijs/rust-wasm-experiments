@@ -1,4 +1,8 @@
+import RenderIf from "./RenderIf";
+
+import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 
 const data = {
@@ -28,6 +32,16 @@ const data = {
 };
 
 export default function PerformancePage() {
+    const [txFiles, setTxFiles] = useState([]);
+
+    const onFilesSelected = event => {
+        setTxFiles(event.target.files);
+    };
+
+    const onClearFiles = () => {
+        setTxFiles([]);
+    };
+
     return (
         <>
             <Typography variant="h2">Performance Test</Typography>
@@ -39,6 +53,16 @@ export default function PerformancePage() {
                     maintainAspectRatio: false
                 }}
             />
+
+            <RenderIf value={txFiles.length === 0}>
+                <input id="file-select" type="file" multiple={true} accept=".csv" onChange={onFilesSelected}/>
+            </RenderIf>
+
+            <RenderIf value={txFiles.length > 0}>
+                <Button variant="contained" color="secondary" onClick={onClearFiles}>
+                    clear file(s)
+                </Button>
+            </RenderIf>
         </>
     );
 }
