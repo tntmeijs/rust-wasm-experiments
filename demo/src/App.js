@@ -1,9 +1,11 @@
 import './App.css';
+import "./Menu";
+import Menu from './Menu';
 
 function App() {
     return (
         <>
-            WASM experiments
+            <Menu/>
         </>
     );
 }
