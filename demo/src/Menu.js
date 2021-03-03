@@ -1,5 +1,3 @@
-import React from "react";
-
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
@@ -14,50 +12,65 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import InfoIcon from "@material-ui/icons/Info";
 
 import { makeStyles } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
+    links: {
+        color: "inherit !important",
+        textDecoration: "none"
+    }
 }));
 
 export default function Menu() {
     const classes = useStyles();
 
     return (
-        <Drawer className={classes.drawer} variant="permanent" anchor="left">
+        <Drawer variant="permanent" anchor="left">
             <Divider />
             <List>
-                <ListItem button key="Home">
-                    <ListItemIcon>
-                        <HomeIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Home" />
-                </ListItem>
-                <ListItem button key="Performance">
-                    <ListItemIcon>
-                        <SpeedIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Performance" />
-                </ListItem>
-                <ListItem button key="Generate Data">
-                    <ListItemIcon>
-                        <GetAppIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Generate Data" />
-                </ListItem>
+                <Link to="/" className={classes.links}>
+                    <ListItem button key="Home">
+                        <ListItemIcon>
+                            <HomeIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Home" />
+                    </ListItem>
+                </Link>
+                <Link to="/performance" className={classes.links}>
+                    <ListItem button key="Performance">
+                        <ListItemIcon>
+                            <SpeedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Performance" />
+                    </ListItem>
+                </Link>
+                <Link to="generate-data" className={classes.links}>
+                    <ListItem button key="Generate Data">
+                        <ListItemIcon>
+                            <GetAppIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Generate Data" />
+                    </ListItem>
+                </Link>
             </List>
             <Divider />
             <List>
-                <ListItem button key="Resources">
-                    <ListItemIcon>
-                        <DescriptionIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Resources" />
-                </ListItem>
-                <ListItem button key="Project Info">
-                    <ListItemIcon>
-                        <InfoIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Project Info" />
-                </ListItem>
+                <Link to="resources" className={classes.links}>
+                    <ListItem button key="Resources">
+                        <ListItemIcon>
+                            <DescriptionIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Resources" />
+                    </ListItem>
+                </Link>
+                <Link to="project-info" className={classes.links}>
+                    <ListItem button key="Project Info">
+                        <ListItemIcon>
+                            <InfoIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Project Info" />
+                    </ListItem>
+                </Link>
             </List>
         </Drawer>
     );
