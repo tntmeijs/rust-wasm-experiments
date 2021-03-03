@@ -68,12 +68,12 @@ fn generate_lines(count: u32) -> Vec<String> {
 
     let mut previous_percentage = 0;
     for i in 0..count {
-        let base_price = rng.gen::<f32>() * 1000.0f32;
+        let base_price = rng.gen::<f32>() * rng.gen::<f32>() * 1000.0f32;
 
         let index = i.to_string();
         let name = item_names[rng.gen_range(0..item_names.len())].to_owned();
         let min_price = format!("{:.2}", base_price);
-        let max_price = format!("{:.2}", ((rng.gen::<f32>() * (base_price * 0.5f32)) + base_price));
+        let max_price = format!("{:.2}", ((rng.gen::<f32>() * rng.gen::<f32>() * (base_price * 0.5f32)) + base_price));
 
         lines.push(vec!(index, name, min_price, max_price).join(", "));
 
