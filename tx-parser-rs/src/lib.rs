@@ -57,7 +57,7 @@ pub fn process(data: &[u8]) -> String {
         line_index += 1;
     }
 
-    // Trans how often items occur in the data set
+    // Tracks how often items occur in the data set
     let mut name_occurance_map = HashMap::new();
 
     // Tracks the cheapest object
@@ -98,7 +98,7 @@ pub fn process(data: &[u8]) -> String {
     }
 
     // Construct JSON fields
-    let transaction_count_msg       = format!(r#""transaction_count":{},"#, transactions.len());
+    let transaction_count_msg       = format!(r#""transactionCount":{},"#, transactions.len());
     let error_count_msg             = format!(r#""errorCount":{},"#, error_count);
     let failure_rate_msg            = format!(r#""failureRate":{:.2},"#, error_count as f32 / transactions.len() as f32 * 100.0f32);
     let most_frequent_name_msg      = format!(r#""mostFrequentName":"{}","#, most_frequent_name);

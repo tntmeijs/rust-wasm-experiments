@@ -1,0 +1,19 @@
+{
+  "name": "tx-parser-js",
+  "version": "1.0.0",
+  "description": "An example project to show vanilla JavaScript performance capabilities",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tntmeijs/rust-wasm-experiments.git"
+  },
+  "author": "Tahar Meijs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tntmeijs/rust-wasm-experiments/issues"
+  },
+  "homepage": "https://github.com/tntmeijs/rust-wasm-experiments#readme"
+}
