@@ -59,9 +59,38 @@ export default function PerformancePage() {
                     
                     const parseTime = performance.now() - startTime;
                     setRustParsingTime([...rustParsingTime, parseTime]);
+
+                    // After the Rust parser, run the JavaScript parser
+                    runJsParser();
                 };
 
                 reader.readAsArrayBuffer(txFiles[0]);
+            })
+            .catch(error => console.error(error));
+    };
+
+    const runJsParser = () => {
+        let startTime = performance.now();
+
+        import("tx-parser-js")
+            .then(parser => {
+                const loadTime = performance.now() - startTime;
+                setJsModuleLoadTime([...jsModuleLoadTime, loadTime]);
+
+                startTime = performance.now();
+
+                parser.onComplete = data => {};
+                parser.process(
+                    txFiles[0],
+                    () => {
+                        const preprocessTime = performance.now() - startTime;
+                        setJsPreprocessingTime([...jsPreprocessingTime, preprocessTime]);
+                        startTime = performance.now();
+                    },
+                    data => {
+                        const parseTime = performance.now() - startTime;
+                        setJsParsingTime([...jsParsingTime, parseTime]);
+                    });
             })
             .catch(error => console.error(error));
     };
