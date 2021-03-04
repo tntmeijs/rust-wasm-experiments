@@ -25,6 +25,13 @@ export default function PerformancePage() {
         setTxFiles([]);
     };
 
+    const onClearChart = () => {
+        setChartLabels([]);
+        setRustModuleLoadTime([]);
+        setRustPreprocessingTime([]);
+        setRustParsingTime([]);
+    };
+
     const onRunBenchmark = () => {
         // Add a new test run
         setChartLabels([...chartLabels, `${txFiles[0].name} [${uniqueIndex.current++}]`]);
@@ -128,8 +135,15 @@ export default function PerformancePage() {
     return (
         <>
             <Typography variant="h2">Performance Test</Typography>
-            <Bar data={chartData} width={100} height={50} options={{ maintainAspectRatio: false }} />
+            
+            <RenderIf value={chartLabels.length > 0}>
+                <Button variant="contained" color="secondary" onClick={onClearChart}>
+                    clear chart
+                </Button>
+            </RenderIf>
 
+            <Bar data={chartData} width={100} height={50} options={{ maintainAspectRatio: false }} />
+            
             <RenderIf value={txFiles.length === 0}>
                 <input id="file-select" type="file" multiple={false} accept=".csv" onChange={onFilesSelected} />
             </RenderIf>
@@ -138,8 +152,10 @@ export default function PerformancePage() {
                 <Button variant="contained" color="primary" onClick={onRunBenchmark}>
                     run benchmark
                 </Button>
+            
                 <br />
                 <br />
+            
                 <Button variant="contained" color="secondary" onClick={onClearFiles}>
                     clear file(s)
                 </Button>
