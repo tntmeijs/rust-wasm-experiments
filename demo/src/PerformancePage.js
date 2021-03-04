@@ -5,34 +5,12 @@ import Typography from "@material-ui/core/Typography";
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 
-const data = {
-    labels: ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh"],
-    datasets: [
-        {
-            stack: "stackId_0",
-            label: "My First dataset",
-            backgroundColor: "rgba(255,99,132,0.2)",
-            borderColor: "rgba(255,99,132,1)",
-            borderWidth: 1,
-            hoverBackgroundColor: "rgba(255,99,132,0.4)",
-            hoverBorderColor: "rgba(255,99,132,1)",
-            data: [1,2,3,4,5,6,7]
-        },
-        {
-            stack: "stackId_0",
-            label: "My Second dataset",
-            backgroundColor: "rgba(99,255,132,0.2)",
-            borderColor: "rgba(99,255,132,1)",
-            borderWidth: 1,
-            hoverBackgroundColor: "rgba(99,255,132,0.4)",
-            hoverBorderColor: "rgba(99,255,132,1)",
-            data: [7,6,5,4,3,2,1]
-        }
-    ]
-};
-
 export default function PerformancePage() {
     const [txFiles, setTxFiles] = useState([]);
+    const [labels, setLabels] = useState([]);
+    const [moduleLoadTime, setModuleLoadTime] = useState(0);
+    const [preprocessingTime, setPreprocessingTime] = useState(0);
+    const [parsingTime, setParsingTime] = useState(0);
 
     const onFilesSelected = event => {
         setTxFiles(event.target.files);
@@ -44,20 +22,49 @@ export default function PerformancePage() {
 
     const onRunBenchmark = () => {};
 
+    const chartData = {
+        labels: labels,
+        datasets: [
+            {
+                stack: "moduleLoadTime",
+                label: "Module loading",
+                backgroundColor: "rgba(149, 165, 166, 0.2)",
+                borderColor: "rgba(149, 165, 166, 1)",
+                borderWidth: 1,
+                hoverBackgroundColor: "rgba(149, 165, 166, 0.4)",
+                hoverBorderColor: "rgba(149, 165, 166 ,1)",
+                data: moduleLoadTime
+            },
+            {
+                stack: "preprocessingTime",
+                label: "Preprocessing",
+                backgroundColor: "rgba(241, 196, 15, 0.2)",
+                borderColor: "rgba(241, 196, 15, 1)",
+                borderWidth: 1,
+                hoverBackgroundColor: "rgba(241, 196, 15, 0.4)",
+                hoverBorderColor: "rgba(241, 196, 15, 1)",
+                data: preprocessingTime
+            },
+            {
+                stack: "parsingTime",
+                label: "Parsing",
+                backgroundColor: "rgba(52, 152, 219, 0.2)",
+                borderColor: "rgba(52, 152, 219, 1)",
+                borderWidth: 1,
+                hoverBackgroundColor: "rgba(52, 152, 219, 0.4)",
+                hoverBorderColor: "rgba(52, 152, 219, 1)",
+                data: parsingTime
+            }
+        ]
+    };
+
     return (
         <>
             <Typography variant="h2">Performance Test</Typography>
-            <Bar
-                data={data}
-                width={100}
-                height={50}
-                options={{
-                    maintainAspectRatio: false
-                }}
-            />
+            <Bar data={chartData} width={100} height={50} options={{ maintainAspectRatio: false }} />
 
             <RenderIf value={txFiles.length === 0}>
-                <input id="file-select" type="file" multiple={true} accept=".csv" onChange={onFilesSelected}/>
+                <input id="file-select" type="file" multiple={true} accept=".csv" onChange={onFilesSelected} />
             </RenderIf>
 
             <RenderIf value={txFiles.length > 0}>
