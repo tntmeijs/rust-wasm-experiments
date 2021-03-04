@@ -20,7 +20,20 @@ export default function PerformancePage() {
         setTxFiles([]);
     };
 
-    const onRunBenchmark = () => {};
+    const onRunBenchmark = () => {
+        // Add a new test run
+        setLabels([...labels, txFiles[0].name]);
+
+        const moduleLoadStartTime = performance.now();
+
+        // First, load the Rust module
+        import("tx-parser-rs")
+            .then(parser => {
+                const moduleLoadTime = performance.now() - moduleLoadStartTime;
+                setModuleLoadTime([...moduleLoadTime, moduleLoadTime]);
+            })
+            .catch(error => console.error(error));
+    };
 
     const chartData = {
         labels: labels,
@@ -64,7 +77,7 @@ export default function PerformancePage() {
             <Bar data={chartData} width={100} height={50} options={{ maintainAspectRatio: false }} />
 
             <RenderIf value={txFiles.length === 0}>
-                <input id="file-select" type="file" multiple={true} accept=".csv" onChange={onFilesSelected} />
+                <input id="file-select" type="file" multiple={false} accept=".csv" onChange={onFilesSelected} />
             </RenderIf>
 
             <RenderIf value={txFiles.length > 0}>
