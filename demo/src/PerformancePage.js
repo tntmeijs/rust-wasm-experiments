@@ -2,15 +2,20 @@ import RenderIf from "./RenderIf";
 
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Bar } from "react-chartjs-2";
 
 export default function PerformancePage() {
+    const uniqueIndex = useRef(0);
+
     const [txFiles, setTxFiles] = useState([]);
-    const [labels, setLabels] = useState([]);
-    const [moduleLoadTime, setModuleLoadTime] = useState(0);
-    const [preprocessingTime, setPreprocessingTime] = useState(0);
-    const [parsingTime, setParsingTime] = useState(0);
+    const [chartLabels, setChartLabels] = useState([]);
+    const [rustModuleLoadTime, setRustModuleLoadTime] = useState([]);
+    const [rustPreprocessingTime, setRustPreprocessingTime] = useState([]);
+    const [rustParsingTime, setRustParsingTime] = useState([]);
+    const [jsModuleLoadTime, setJsModuleLoadTime] = useState([]);
+    const [jsPreprocessingTime, setJsPreprocessingTime] = useState([]);
+    const [jsParsingTime, setJsParsingTime] = useState([]);
 
     const onFilesSelected = event => {
         setTxFiles(event.target.files);
@@ -22,51 +27,100 @@ export default function PerformancePage() {
 
     const onRunBenchmark = () => {
         // Add a new test run
-        setLabels([...labels, txFiles[0].name]);
+        setChartLabels([...chartLabels, `${txFiles[0].name} [${uniqueIndex.current++}]`]);
 
-        const moduleLoadStartTime = performance.now();
+        let startTime = performance.now();
 
         // First, load the Rust module
         import("tx-parser-rs")
             .then(parser => {
-                const moduleLoadTime = performance.now() - moduleLoadStartTime;
-                setModuleLoadTime([...moduleLoadTime, moduleLoadTime]);
+                const loadTime = performance.now() - startTime;
+                setRustModuleLoadTime([...rustModuleLoadTime, loadTime]);
+
+                // Use JavaScript to convert the file into a binary blob
+                startTime = performance.now();
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const bytes = new Uint8Array(reader.result);
+
+                    const preprocessTime = performance.now() - startTime;
+                    setRustPreprocessingTime([...rustPreprocessingTime, preprocessTime]);
+
+                    startTime = performance.now();
+                    const result = JSON.parse(parser.process(bytes));
+                    
+                    const parseTime = performance.now() - startTime;
+                    setRustParsingTime([...rustParsingTime, parseTime]);
+                };
+
+                reader.readAsArrayBuffer(txFiles[0]);
             })
             .catch(error => console.error(error));
     };
 
     const chartData = {
-        labels: labels,
+        labels: chartLabels,
         datasets: [
             {
-                stack: "moduleLoadTime",
-                label: "Module loading",
+                stack: "rustStack",
+                label: "Rust module loading",
                 backgroundColor: "rgba(149, 165, 166, 0.2)",
                 borderColor: "rgba(149, 165, 166, 1)",
                 borderWidth: 1,
                 hoverBackgroundColor: "rgba(149, 165, 166, 0.4)",
-                hoverBorderColor: "rgba(149, 165, 166 ,1)",
-                data: moduleLoadTime
+                hoverBorderColor: "rgba(149, 165, 166, 1)",
+                data: rustModuleLoadTime
             },
             {
-                stack: "preprocessingTime",
-                label: "Preprocessing",
+                stack: "rustStack",
+                label: "Rust preprocessing",
                 backgroundColor: "rgba(241, 196, 15, 0.2)",
                 borderColor: "rgba(241, 196, 15, 1)",
                 borderWidth: 1,
                 hoverBackgroundColor: "rgba(241, 196, 15, 0.4)",
                 hoverBorderColor: "rgba(241, 196, 15, 1)",
-                data: preprocessingTime
+                data: rustPreprocessingTime
             },
             {
-                stack: "parsingTime",
-                label: "Parsing",
+                stack: "rustStack",
+                label: "Rust parsing",
                 backgroundColor: "rgba(52, 152, 219, 0.2)",
                 borderColor: "rgba(52, 152, 219, 1)",
                 borderWidth: 1,
                 hoverBackgroundColor: "rgba(52, 152, 219, 0.4)",
                 hoverBorderColor: "rgba(52, 152, 219, 1)",
-                data: parsingTime
+                data: rustParsingTime
+            },
+            {
+                stack: "jsStack",
+                label: "JS module loading",
+                backgroundColor: "rgba(149, 165, 166, 0.2)",
+                borderColor: "rgba(149, 165, 166, 1)",
+                borderWidth: 1,
+                hoverBackgroundColor: "rgba(149, 165, 166, 0.4)",
+                hoverBorderColor: "rgba(149, 165, 166 ,1)",
+                data: jsModuleLoadTime
+            },
+            {
+                stack: "jsStack",
+                label: "JS preprocessing",
+                backgroundColor: "rgba(241, 196, 15, 0.2)",
+                borderColor: "rgba(241, 196, 15, 1)",
+                borderWidth: 1,
+                hoverBackgroundColor: "rgba(241, 196, 15, 0.4)",
+                hoverBorderColor: "rgba(241, 196, 15, 1)",
+                data: jsPreprocessingTime
+            },
+            {
+                stack: "jsStack",
+                label: "JS parsing",
+                backgroundColor: "rgba(52, 152, 219, 0.2)",
+                borderColor: "rgba(52, 152, 219, 1)",
+                borderWidth: 1,
+                hoverBackgroundColor: "rgba(52, 152, 219, 0.4)",
+                hoverBorderColor: "rgba(52, 152, 219, 1)",
+                data: jsParsingTime
             }
         ]
     };
