@@ -1,7 +1,9 @@
-exports.process = (file, onComplete) => {
+exports.process = (file, onReady, onComplete) => {
     const reader = new FileReader();
     reader.onload = event => {
         const lines = event.target.result.split(/\r\n|\n/);
+
+        onReady();
 
         let errorCount = 0;
         let transactions = [];
